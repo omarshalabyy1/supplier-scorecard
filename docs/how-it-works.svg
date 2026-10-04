@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 290" width="1000" height="290" role="img" aria-label="How it works: 01 Load, orders, suppliers and departments into a PostgreSQL star schema, checked on every load; 02 Rules, on time, in full and late written once as DAX measures; 03 Secure, row-level security, each buyer sees only their department; 04 Explain, a local LLM writes each department's weekly summary and every number is checked; 05 Report, the Power BI scorecard by department and supplier, with the reasons for late deliveries.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
+    .sub { font-size: 13.5px; fill: #CBD5E1; }
+    .num { font-size: 14px; font-weight: 700; fill: #FFFFFF; }
+    .step { font-size: 16px; font-weight: 700; fill: #FFFFFF; }
+    .desc { font-size: 13px; fill: #94A3B8; }
+    .link { fill: none; stroke: #64748B; stroke-width: 2; stroke-dasharray: 4 6; animation: flow 1.6s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -20; } }
+    .box { fill: #3B82F6; fill-opacity: 0.08; stroke: #3B82F6; stroke-opacity: 0.7; }
+    .dot { fill: #3B82F6; fill-opacity: 0.35; }
+  </style>
+
+  <rect width="1000" height="290" rx="22" fill="url(#bg)"/>
+  <text x="45" y="52" class="title">How it works</text>
+  <text x="45" y="76" class="sub">Two scripts rebuild the warehouse and the summaries; Power BI's Refresh does the rest.</text>
+
+  <path class="link" d="M213 175h18"/>
+  <path class="link" d="M399 175h18"/>
+  <path class="link" d="M585 175h18"/>
+  <path class="link" d="M771 175h18"/>
+
+  <!-- 01 -->
+  <rect x="45" y="105" width="168" height="150" rx="14" class="box"/>
+  <circle cx="77" cy="138" r="17" class="dot"/>
+  <text x="77" y="143" class="num" text-anchor="middle">01</text>
+  <text x="103" y="144" class="step">Load</text>
+  <text x="61" y="182" class="desc">Orders, suppliers and</text>
+  <text x="61" y="200" class="desc">departments into a</text>
+  <text x="61" y="218" class="desc">star schema, checked</text>
+  <text x="61" y="236" class="desc">on every load</text>
+
+  <!-- 02 -->
+  <rect x="231" y="105" width="168" height="150" rx="14" class="box"/>
+  <circle cx="263" cy="138" r="17" class="dot"/>
+  <text x="263" y="143" class="num" text-anchor="middle">02</text>
+  <text x="289" y="144" class="step">Rules</text>
+  <text x="247" y="182" class="desc">On time, in full and</text>
+  <text x="247" y="200" class="desc">late, written once as</text>
+  <text x="247" y="218" class="desc">DAX measures</text>
+
+  <!-- 03 -->
+  <rect x="417" y="105" width="168" height="150" rx="14" class="box"/>
+  <circle cx="449" cy="138" r="17" class="dot"/>
+  <text x="449" y="143" class="num" text-anchor="middle">03</text>
+  <text x="475" y="144" class="step">Secure</text>
+  <text x="433" y="182" class="desc">Row-level security:</text>
+  <text x="433" y="200" class="desc">each buyer sees only</text>
+  <text x="433" y="218" class="desc">their department</text>
+
+  <!-- 04 -->
+  <rect x="603" y="105" width="168" height="150" rx="14" class="box"/>
+  <circle cx="635" cy="138" r="17" class="dot"/>
+  <text x="635" y="143" class="num" text-anchor="middle">04</text>
+  <text x="661" y="144" class="step">Explain</text>
+  <text x="619" y="182" class="desc">A local LLM writes</text>
+  <text x="619" y="200" class="desc">each weekly summary;</text>
+  <text x="619" y="218" class="desc">every number checked</text>
+
+  <!-- 05 -->
+  <rect x="789" y="105" width="168" height="150" rx="14" class="box"/>
+  <circle cx="821" cy="138" r="17" class="dot"/>
+  <text x="821" y="143" class="num" text-anchor="middle">05</text>
+  <text x="847" y="144" class="step">Report</text>
+  <text x="805" y="182" class="desc">Power BI scorecard by</text>
+  <text x="805" y="200" class="desc">department and</text>
+  <text x="805" y="218" class="desc">supplier, and why</text>
+  <text x="805" y="236" class="desc">deliveries were late</text>
+</svg>

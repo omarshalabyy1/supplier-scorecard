@@ -1,0 +1,10 @@
+# The warehouse: one PostgreSQL, reachable from this computer only.
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: scorecard
+      POSTGRES_USER: scorecard
+      POSTGRES_PASSWORD: scorecard
+    ports:
+      - "127.0.0.1:5435:5432"

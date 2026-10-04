@@ -1,0 +1,30 @@
+{
+  "name": "Supplier scorecard",
+  "dataColors": ["#2563EB", "#94A3B8", "#0E1630", "#60A5FA", "#CBD5E1", "#475569", "#1E40AF", "#E2E8F0"],
+  "background": "#FFFFFF",
+  "foreground": "#0E1630",
+  "tableAccent": "#2563EB",
+  "good": "#2563EB",
+  "neutral": "#94A3B8",
+  "bad": "#0E1630",
+  "textClasses": {
+    "callout": { "fontSize": 28, "fontFace": "Segoe UI Semibold", "color": "#0E1630" },
+    "title": { "fontSize": 12, "fontFace": "Segoe UI Semibold", "color": "#0E1630" },
+    "header": { "fontSize": 12, "fontFace": "Segoe UI Semibold", "color": "#0E1630" },
+    "label": { "fontSize": 10, "fontFace": "Segoe UI", "color": "#475569" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": true, "color": { "solid": { "color": "#E2E8F0" } }, "radius": 8 }],
+        "title": [{ "show": true, "fontColor": { "solid": { "color": "#0E1630" } }, "fontSize": 12 }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#F1F5F9" } }, "transparency": 0 }]
+      }
+    }
+  }
+}

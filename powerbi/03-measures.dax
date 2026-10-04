@@ -1,0 +1,140 @@
+// Supplier scorecard: every rule and measure, in the order to paste them.
+// Calculated columns go on fact_order_line (Table tools -> New column).
+// Measures go on _Measures (Home -> New measure). Set the format string and display folder shown above each one.
+
+
+// ======================================================================
+// Calculated columns on fact_order_line: the rules, written once
+// ======================================================================
+
+// Delivery: "On time" if the customer got it on or before the promised date, "Late" if after,
+// "Not delivered" if it never arrived. In full = delivered.
+Delivery =
+VAR _Delivered = fact_order_line[delivered_date]
+VAR _Promised = fact_order_line[due_date]
+RETURN
+    SWITCH (
+        TRUE (),
+        ISBLANK ( _Delivered ), "Not delivered",
+        _Delivered <= _Promised, "On time",
+        "Late"
+    )
+
+// Handover: did the supplier hand the item to the carrier by its own deadline?
+Handover =
+VAR _HandedOver = fact_order_line[handed_over]
+VAR _Deadline = fact_order_line[handover_due]
+RETURN
+    SWITCH (
+        TRUE (),
+        ISBLANK ( _HandedOver ), "Not handed over",
+        _HandedOver <= _Deadline, "On-time hand-over",
+        "Late hand-over"
+    )
+
+
+// ======================================================================
+// Page 1 Scorecard · display folder "Scorecard"
+// ======================================================================
+
+// Order Lines: every order line in the current filter. Format: #,0
+Order Lines =
+COUNTROWS ( fact_order_line )
+
+// Orders: distinct orders. Format: #,0
+Orders =
+DISTINCTCOUNT ( fact_order_line[order_id] )
+
+// Delivered Lines: lines the customer received, on time or late (in full). Format: #,0
+Delivered Lines =
+CALCULATE ( [Order Lines], KEEPFILTERS ( fact_order_line[Delivery] <> "Not delivered" ) )
+
+// On-Time Lines: lines delivered on or before the promised date. Format: #,0
+On-Time Lines =
+CALCULATE ( [Order Lines], KEEPFILTERS ( fact_order_line[Delivery] = "On time" ) )
+
+// Late Lines: lines delivered after the promised date. Format: #,0
+Late Lines =
+CALCULATE ( [Order Lines], KEEPFILTERS ( fact_order_line[Delivery] = "Late" ) )
+
+// OTIF %: on time and in full, out of every order line. Format: 0.0%
+OTIF % =
+DIVIDE ( [On-Time Lines], [Order Lines] )
+
+// Fill Rate %: delivered lines out of every order line. Format: 0.0%
+Fill Rate % =
+DIVIDE ( [Delivered Lines], [Order Lines] )
+
+// Late Rate %: late lines out of delivered lines. Format: 0.0%
+Late Rate % =
+DIVIDE ( [Late Lines], [Delivered Lines] )
+
+// Avg Days Late: average days between the promised date and the delivery, late lines only. Format: 0.0
+Avg Days Late =
+CALCULATE (
+    AVERAGEX ( fact_order_line, INT ( fact_order_line[delivered_date] - fact_order_line[due_date] ) ),
+    KEEPFILTERS ( fact_order_line[Delivery] = "Late" )
+)
+
+
+// ======================================================================
+// Page 2 Suppliers · display folder "Suppliers"
+// ======================================================================
+
+// Share of Late Deliveries %: this supplier's late lines out of all suppliers' late lines. Format: 0.0%
+Share of Late Deliveries % =
+DIVIDE ( [Late Lines], CALCULATE ( [Late Lines], REMOVEFILTERS ( dim_supplier ) ) )
+
+// Watch List Threshold %: twice the late rate of all suppliers in the current filter. Format: 0.0%
+Watch List Threshold % =
+2 * CALCULATE ( [Late Rate %], REMOVEFILTERS ( dim_supplier ) )
+
+// On Watch List: 1 for a supplier with 30+ delivered lines and a late rate at or above the threshold, else 0;
+// blank outside a single supplier. Format: 0
+On Watch List =
+VAR _EnoughLines = [Delivered Lines] >= 30
+VAR _TooLate = [Late Rate %] >= [Watch List Threshold %]
+RETURN
+    IF ( HASONEVALUE ( dim_supplier[supplier_key] ), INT ( _EnoughLines && _TooLate ) )
+
+// Watch List Suppliers: how many suppliers are on the watch list. Format: #,0
+Watch List Suppliers =
+VAR _Watched = FILTER ( VALUES ( dim_supplier[supplier_key] ), [On Watch List] = 1 )
+RETURN
+    COUNTROWS ( _Watched ) + 0
+
+// Watch List Share of Delivered %: watch-list suppliers' delivered lines out of all delivered lines. Format: 0.0%
+Watch List Share of Delivered % =
+VAR _Watched = FILTER ( VALUES ( dim_supplier[supplier_key] ), [On Watch List] = 1 )
+RETURN
+    DIVIDE ( SUMX ( _Watched, [Delivered Lines] ), [Delivered Lines] )
+
+// Watch List Share of Late %: watch-list suppliers' late lines out of all late lines. Format: 0.0%
+Watch List Share of Late % =
+VAR _Watched = FILTER ( VALUES ( dim_supplier[supplier_key] ), [On Watch List] = 1 )
+RETURN
+    DIVIDE ( SUMX ( _Watched, [Late Lines] ), [Late Lines] )
+
+
+// ======================================================================
+// Page 3 Why late · display folder "Hand-over"
+// ======================================================================
+
+// Handed Over Lines: lines the carrier received. Format: #,0
+Handed Over Lines =
+CALCULATE ( [Order Lines], KEEPFILTERS ( fact_order_line[Handover] <> "Not handed over" ) )
+
+// Late Hand-over Lines: lines the supplier handed to the carrier after its deadline. Format: #,0
+Late Hand-over Lines =
+CALCULATE ( [Order Lines], KEEPFILTERS ( fact_order_line[Handover] = "Late hand-over" ) )
+
+// Late Hand-over Rate %: late hand-overs out of all hand-overs. Format: 0.0%
+Late Hand-over Rate % =
+DIVIDE ( [Late Hand-over Lines], [Handed Over Lines] )
+
+// Late After Late Hand-over %: the share of late deliveries that started with a late hand-over by the supplier. Format: 0.0%
+Late After Late Hand-over % =
+DIVIDE (
+    CALCULATE ( [Late Lines], KEEPFILTERS ( fact_order_line[Handover] = "Late hand-over" ) ),
+    [Late Lines]
+)

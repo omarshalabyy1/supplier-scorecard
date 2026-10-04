@@ -1,0 +1,11 @@
+buyer_email,department
+buyer.home@example.com,Home & Furniture
+buyer.kitchen@example.com,Kitchen & Appliances
+buyer.beauty@example.com,Health & Beauty
+buyer.electronics@example.com,Electronics
+buyer.fashion@example.com,Sports & Fashion
+buyer.tools@example.com,"Tools, Garden & Auto"
+buyer.toys@example.com,"Toys, Baby & Gifts"
+buyer.books@example.com,"Books, Media & Stationery"
+buyer.food@example.com,"Food, Drink & Pets"
+buyer.other@example.com,Other
