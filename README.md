@@ -81,10 +81,14 @@ the source files, and matched by [`sql/check_numbers.sql`](sql/check_numbers.sql
 department from the week's numbers. The model only puts the numbers into words. Before a summary is
 saved, three checks run: every number in it must be one of the facts, every supplier it names must be
 the one in the facts, and it must say the late rate went the way it really went. A summary that fails
-is written again; after three tries the run stops and saves nothing. For the week of 27 August 2018:
+is written again; after three tries the run stops and saves nothing. For the week of 27 August 2018,
+one run wrote (the wording changes from run to run; the numbers do not):
 
-> Electronics: 279 order lines were due this week. The late rate was 1.4%, down from 7.8% last week,
-> and 97.8% arrived on time and in full. Follow up with S0081, which had 1 late line.
+> Home & Furniture: 375 order lines were due this week. The late rate was 3.0%, down from 6.8% last
+> week, and 96.0% arrived on time and in full. Follow up with S0193, which had 4 late lines.
+
+The checks earn their place: on the first runs the model wrote that the late rate "increased" when it
+fell, and named a supplier it copied from the prompt's example. Both are now rejected and rewritten.
 
 ## The Power BI report
 
