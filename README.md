@@ -98,8 +98,8 @@ hand-over against the customer's delivery) and **Supplier detail** (drill-throug
 lines). A `Buyer` role filters every page to the buyer's department.
 
 The [`powerbi/`](powerbi/) folder rebuilds the report from nothing by copy and paste: every Power Query
-step, the model, every measure, every visual with its fields, the theme, and the numbers each page must
-show.
+step, the model, every measure, every visual with its fields, the theme, every interaction and filter,
+the numbers each page must show, and a 38-step build checklist.
 
 ## How it is built
 

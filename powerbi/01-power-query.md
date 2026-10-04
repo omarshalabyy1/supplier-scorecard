@@ -1,35 +1,45 @@
 # 01 · Power Query
 
-Every query reads one table of the `star` schema in PostgreSQL. Nothing is cleaned in Power Query: the
-cleaning and the checks happen in `load.py`, so the report only sets column types.
+Every query reads one table of the `star` schema in the local PostgreSQL. Nothing is cleaned in Power
+Query: `load.py` cleans and checks the data, so each query only picks its table and sets the column
+types. No column is renamed: the report uses the warehouse's names, so the SQL, the notebook and the
+report all say the same thing.
 
-Before you start: `docker compose up -d`, `python load.py` and `python summarize.py 2018-08-27` have run
-(see the main README).
+**Before you start** (steps 1 to 6 of `08-build-checklist.md`): `docker compose up -d`, `python load.py`,
+Ollama running on the CPU, `python summarize.py 2018-08-27`. The database is then at `127.0.0.1:5435`,
+database `scorecard`, user `scorecard`, password `scorecard`.
 
-## 1. The connection (staging query, not loaded)
+## 1. Warehouse: the connection (staging, not loaded)
 
-1. Home → Get data → Blank query. Rename it `Warehouse`.
-2. Home → Advanced Editor, paste, Done:
+1. **Home → Get data → Blank query.** In the Query settings pane on the right, rename it `Warehouse`.
+2. **Home → Advanced Editor**, select everything, paste, **Done**:
 
 ```m
 let
-    Source = PostgreSQL.Database("localhost:5435", "scorecard")
+    Source = PostgreSQL.Database("127.0.0.1:5435", "scorecard")
 in
     Source
 ```
 
-3. When asked for credentials, choose **Database**: user `scorecard`, password `scorecard`.
-4. If Power BI says it cannot connect with encryption, choose **OK** to connect without it (the database
-   only listens on this computer).
-5. Right-click `Warehouse` → untick **Enable load**. It stays a staging query: every other query starts
-   from it, so the server name lives in one place.
+3. Power BI asks for credentials: choose **Database** on the left, user name `scorecard`, password
+   `scorecard`, level `127.0.0.1:5435`, **Connect**.
+4. If it says it cannot connect with an encrypted connection, choose **OK** to connect without
+   encryption. The database listens on this computer only.
+5. Right-click `Warehouse` in the Queries list → untick **Enable load**.
 
-## 2. The tables (each one loaded)
+Why a staging query: every other query starts from `Warehouse`, so the server address lives in one place.
 
-For each query below: Home → New source → Blank query, rename it to the name in the heading, open the
-Advanced Editor and paste.
+Applied steps: `Source`.
+
+## 2. The six loaded queries
+
+For each query: **Home → New source → Blank query**, rename it to the heading, **Advanced Editor**,
+paste, **Done**. Applied steps for each: `Source` (pick the table), `Typed` (set the types), and for
+`weekly_summary` also `Kept` (drop `created_at`).
 
 ### fact_order_line
+
+One row per order line: 112,650 rows.
 
 ```m
 let
@@ -52,7 +62,24 @@ in
     Typed
 ```
 
+| Column | Type | Meaning |
+|---|---|---|
+| `order_id` | Text | the order |
+| `order_item_id` | Whole number | the line number inside the order |
+| `supplier_key` | Whole number | key to `dim_supplier` |
+| `product_key` | Whole number | key to `dim_product` |
+| `order_status` | Text | the order's last status (delivered, shipped, canceled, ...) |
+| `purchase_date` | Date | when the customer ordered |
+| `handover_due` | Date/Time | the supplier's deadline to hand the item to the carrier |
+| `handed_over` | Date/Time | when the carrier got it (empty if never) |
+| `due_date` | Date | the delivery date promised to the customer |
+| `delivered_date` | Date | when the customer got it (empty if never) |
+| `price` | Fixed decimal | item price |
+| `freight_value` | Fixed decimal | freight charged for the item |
+
 ### dim_supplier
+
+One row per supplier: 3,095 rows.
 
 ```m
 let
@@ -68,7 +95,16 @@ in
     Typed
 ```
 
+| Column | Type | Meaning |
+|---|---|---|
+| `supplier_key` | Whole number | key |
+| `supplier` | Text | short code, S0001 to S3095 (the sellers have no names) |
+| `seller_id` | Text | the source's id, kept for tracing |
+| `city`, `state` | Text | where the supplier ships from |
+
 ### dim_product
+
+One row per product: 32,951 rows.
 
 ```m
 let
@@ -83,7 +119,17 @@ in
     Typed
 ```
 
+| Column | Type | Meaning |
+|---|---|---|
+| `product_key` | Whole number | key |
+| `product_id` | Text | the source's id, kept for tracing |
+| `category` | Text | product category (73, in English) |
+| `department` | Text | the buying department (10), from `data/departments.csv` |
+
 ### dim_date
+
+One row per day from 30 Sep 2016 to 12 Nov 2018 (every promised delivery date): 774 rows. Built in SQL (`sql/02_star.sql`), so Power
+BI needs no date table of its own.
 
 ```m
 let
@@ -99,7 +145,17 @@ in
     Typed
 ```
 
+| Column | Type | Meaning |
+|---|---|---|
+| `date` | Date | the day (key) |
+| `year` | Whole number | 2016 to 2018 |
+| `month` | Text | "Mar 2018" |
+| `month_sort` | Whole number | 201803, to sort `month` |
+| `week_start` | Date | the Monday of the week |
+
 ### buyer
+
+One row per buyer: 10 rows. Read only by row-level security.
 
 ```m
 let
@@ -112,7 +168,14 @@ in
     Typed
 ```
 
+| Column | Type | Meaning |
+|---|---|---|
+| `buyer_email` | Text | the buyer's sign-in |
+| `department` | Text | the department the buyer owns |
+
 ### weekly_summary
+
+One row per department per summarised week: 11 rows after `summarize.py 2018-08-27`.
 
 ```m
 let
@@ -127,22 +190,28 @@ in
     Kept
 ```
 
+| Column | Type | Meaning |
+|---|---|---|
+| `week_start` | Date | the Monday of the summarised week |
+| `department` | Text | a department, or "All departments" |
+| `summary` | Text | two or three sentences written by the local model and checked |
+
 ## 3. The measures table
 
-Home → Enter data. Name the table `_Measures`, leave the one column empty, Load. The measures in
-`03-measures.dax` go in this table; once the first measure is in, delete the empty column (`Column1`).
+**Home → Enter data.** Name the table `_Measures`, leave the one column as it is, **Load**. The
+measures from `03-measures.dax` go in this table; once the first measure is in, delete `Column1`.
 
 ## What loads
 
-| Query | Loads | Rows |
+| Query | Enable load | Rows |
 |---|---|---|
-| `Warehouse` | No (staging) | |
-| `fact_order_line` | Yes | 112,650 |
-| `dim_supplier` | Yes | 3,095 |
-| `dim_product` | Yes | 32,951 |
-| `dim_date` | Yes | 774 |
-| `buyer` | Yes (hidden, used by security) | 10 |
-| `weekly_summary` | Yes | 11 per summarised week |
-| `_Measures` | Yes (measures only) | |
+| `Warehouse` | Off (staging) | |
+| `fact_order_line` | On | 112,650 |
+| `dim_supplier` | On | 3,095 |
+| `dim_product` | On | 32,951 |
+| `dim_date` | On | 774 |
+| `buyer` | On (hidden in the model) | 10 |
+| `weekly_summary` | On | 11 |
+| `_Measures` | On (measures only) | |
 
-Close & Apply.
+**Home → Close & Apply.**

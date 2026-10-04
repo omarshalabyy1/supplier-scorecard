@@ -1,6 +1,8 @@
 # The Power BI report
 
-Everything needed to build the supplier scorecard in Power BI Desktop from nothing, by copy and paste.
+Everything needed to build the supplier scorecard in Power BI Desktop from nothing, by copy and paste,
+click by click. Nothing is left to choose: every query, column, relationship, measure, visual, colour,
+interaction and filter is written down, with the number to check at each step.
 
 ## What it answers
 
@@ -12,20 +14,28 @@ Everything needed to build the supplier scorecard in Power BI Desktop from nothi
 
 ## Pages
 
-1. **Scorecard**: the headline cards, the late rate by month and by department, and this week's summaries.
-2. **Suppliers**: the watch list, the supplier table and volume against late rate.
-3. **Why late**: the supplier's hand-over against the customer's delivery.
-4. **Supplier detail**: one supplier's lines, opened by drill-through from page 2.
+4 pages, 39 visuals, 19 measures, 2 calculated columns, 1 security role.
 
-## Build it in this order
+1. **Scorecard** (12 visuals): the headline cards, the late rate by month and by department, and this
+   week's summaries.
+2. **Suppliers** (9): the watch list, the supplier table and volume against late rate.
+3. **Why late** (10): the supplier's hand-over against the customer's delivery.
+4. **Supplier detail** (8): one supplier's lines, opened by drill-through from page 2.
 
-| Step | File | You do |
-|---|---|---|
-| 0 | the main README, "Run it" | start PostgreSQL, run `load.py` and `summarize.py` |
-| 1 | `01-power-query.md` | create the connection and the six queries |
-| 2 | `02-model.md` | relationships, date table, sort order, hidden columns, security role |
-| 3 | `03-measures.dax` | add the two calculated columns, then every measure with its format and folder |
-| 4 | `05-theme.json` | View → Themes → Browse for themes → this file |
-| 5 | `04-pages.md` | build the four pages, visual by visual |
-| 6 | `06-checks.md` | compare every card with the expected numbers, and test the security |
-| 7 | `screenshots/` | save `Supplier_Scorecard.pbix` here in `powerbi/`, and one screenshot per page |
+## The files
+
+| File | What it holds |
+|---|---|
+| `01-power-query.md` | the connection and the six queries: M code, columns, types, which load |
+| `02-model.md` | tables and grain, relationships, the date table, sort, formats, hidden columns, display folders, security, each with its reason |
+| `03-measures.dax` | the two calculated columns and the 19 measures, grouped by page, each with its format and folder |
+| `04-pages.md` | every page and visual in build order: fields, titles, sort, colours, positions, slicers |
+| `05-theme.json` | the theme shared by all the portfolio reports |
+| `06-checks.md` | the number every card, chart and table must show, including the view as one buyer |
+| `07-interactions.md` | what each click filters, the drill-through, and every filter |
+| `08-build-checklist.md` | the whole build as 38 numbered steps, from `docker compose up -d` to the last screenshot |
+| `screenshots/` | one image per finished page |
+
+## Start here
+
+Follow `08-build-checklist.md` from step 1; it points into the other files at each stage.
