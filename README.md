@@ -10,8 +10,6 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
-<p align="center"><b>New client? See <a href="docs/new-client.md">docs/new-client.md</a>.</b></p>
-
 ## The problem
 
 Buyers find out which suppliers deliver late or short when the shelf is already empty. The order
@@ -161,7 +159,7 @@ writes the eleven summaries in about three minutes on a laptop CPU.
 ├── theme.py             the Power BI theme from the client's colours
 ├── analysis/            the notebook that computes every number
 ├── powerbi/             the step-by-step report build
-└── docs/                the diagrams and charts in this README, and new-client.md
+└── docs/                the diagrams and charts in this README
 ```
 
 ## Limits
