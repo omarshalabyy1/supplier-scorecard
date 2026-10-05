@@ -3,6 +3,10 @@
 </p>
 
 <p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1200&color=2DD4BF&center=true&vCenter=true&width=760&lines=On+time.+In+full.+Late.;Every+supplier+scored+every+week;29%25+of+late+deliveries+began+at+hand-over" alt="On time. In full. Late.">
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Power_BI-DAX_%26_Power_Query-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" alt="Power BI, DAX and Power Query">
   <img src="https://img.shields.io/badge/PostgreSQL-17-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL 17">
   <img src="https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10">
@@ -52,6 +56,10 @@ The rules are written once, as two DAX calculated columns, and every measure fil
 ([`powerbi/03-measures.dax`](powerbi/03-measures.dax)).
 
 ## 📈 What it found
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/221352987-68da234d-4d62-4e9d-9d7f-098dc657c2dc.gif" width="100" alt="Moving chart">
+</p>
 
 **98,666 orders (112,650 order lines from 3,095 suppliers): 29% of late deliveries started with a late
 hand-over by the supplier, and 61 suppliers with 4.4% of deliveries caused 12% of late deliveries.**
@@ -127,6 +135,10 @@ the numbers each page must show, and a 38-step build checklist.
 
 ## ▶️ Run it
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284087-bbe7e430-757e-4901-90bf-4cd2ce3e1852.gif" width="100" alt="Code">
+</p>
+
 You need Docker Desktop, Python 3.10+, [Ollama](https://ollama.com) and Power BI Desktop (free, Windows).
 Copy `.env.example` to `.env`, and download the four order files into `data/input/` (commands in
 [`data/input/README.md`](data/input/README.md)). Then:
@@ -189,3 +201,7 @@ addresses at example.com) is this project's own. This is not work for Olist.
 ---
 
 Built by [Omar Shalaby](https://github.com/omarshalabyy1) · Power BI, DAX, PostgreSQL, Python, Ollama
+
+<p align="center">
+  <img width="100%" src="docs/footer.svg" alt="Know which suppliers make your customers wait.">
+</p>
