@@ -56,9 +56,7 @@ with psycopg.connect(cfg["db_url"]) as conn:
     for table in ["dim_supplier", "dim_product", "dim_date", "fact_order_line", "buyer"]:
         print(f"star.{table:21} {conn.execute(f'SELECT COUNT(*) FROM star.{table}').fetchone()[0]:>8,} rows")
 
-    failed = [(rule, bad) for rule, bad in conn.execute(sql("03_checks.sql")) if bad]
-    for rule, bad in failed:
-        print(f"CHECK FAILED: {rule} ({bad:,} rows)")
+    failed = [f"{rule} ({bad:,} rows)" for rule, bad in conn.execute(sql("03_checks.sql")) if bad]
     if failed:
-        raise SystemExit("Load rolled back: the warehouse still holds the last good load.")
+        raise SystemExit(f"CHECK FAILED: {'; '.join(failed)}. Load rolled back: the warehouse keeps the last good load.")
     print("All checks passed.")
