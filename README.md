@@ -16,7 +16,7 @@ Buyers find out which suppliers deliver late or short when the shelf is already 
 history holds the answer, but it sits in separate exports, nobody agrees on what "on time" means, and
 when a delivery is late nobody can say whether the supplier or the carrier caused it.
 
-## What this builds
+## 🛠️ What this builds
 
 A Power BI supplier scorecard on a PostgreSQL star schema. It scores every supplier and department on
 on-time-in-full, fill rate and late rate, flags the suppliers that need a call, separates late
@@ -27,7 +27,7 @@ beside the charts. Each buyer sees only their own department.
   <img width="100%" src="docs/how-it-works.svg" alt="How it works: 01 Load, orders, suppliers and departments into a star schema, checked on every load; 02 Rules, on time, in full and late written once as DAX measures; 03 Secure, each buyer sees only their department; 04 Explain, a local LLM writes each weekly summary and every number is checked; 05 Report, the Power BI scorecard by department and supplier, and why deliveries were late.">
 </p>
 
-### The mental model: one order line, two promises
+### 🔁 The mental model: one order line, two promises
 
 Every order line carries two promises. The **supplier** promises to hand the item to the carrier by a
 deadline. The **customer** is promised a delivery date. The scorecard judges each line against both, so
@@ -51,7 +51,7 @@ a late delivery can be traced back to where it started.
 The rules are written once, as two DAX calculated columns, and every measure filters on them
 ([`powerbi/03-measures.dax`](powerbi/03-measures.dax)).
 
-## What it found
+## 📈 What it found
 
 **98,666 orders (112,650 order lines from 3,095 suppliers): 29% of late deliveries started with a late
 hand-over by the supplier, and 61 suppliers with 4.4% of deliveries caused 12% of late deliveries.**
@@ -75,7 +75,7 @@ hand-over by the supplier, and 61 suppliers with 4.4% of deliveries caused 12% o
 Every number above is computed in [`analysis/analysis.ipynb`](analysis/analysis.ipynb) straight from
 the source files, and matched by [`sql/check_numbers.sql`](sql/check_numbers.sql) on the warehouse.
 
-## The weekly summary
+## 📬 The weekly summary
 
 `summarize.py` asks a local model (llama3.2, 3B, through Ollama) to write two or three sentences per
 department from the week's numbers. The model only puts the numbers into words. Before a summary is
@@ -90,7 +90,7 @@ one run wrote (the wording changes from run to run; the numbers do not):
 The checks earn their place: on the first runs the model wrote that the late rate "increased" when it
 fell, and named a supplier it copied from the prompt's example. Both are now rejected and rewritten.
 
-## The Power BI report
+## 📊 The Power BI report
 
 Four pages: **Scorecard** (the cards, the late rate by month and department, and this week's
 summaries), **Suppliers** (the watch list and every supplier's score), **Why late** (the supplier's
@@ -101,7 +101,7 @@ The [`powerbi/`](powerbi/) folder rebuilds the report from nothing by copy and p
 step, the model, every measure, every visual with its fields, the theme, every interaction and filter,
 the numbers each page must show, and a 38-step build checklist.
 
-## How it is built
+## 🏗️ How it is built
 
 - **Client settings** ([`config/client.yaml`](config/client.yaml), read only through `load_config()` in
   [`config.py`](config.py)): the client's name, input file names, rule thresholds, summary week and model,
@@ -125,7 +125,7 @@ the numbers each page must show, and a 38-step build checklist.
   checks above.
 - **Report:** the scorecard reads the `star` schema directly; Refresh in Power BI after a load.
 
-## Run it
+## ▶️ Run it
 
 You need Docker Desktop, Python 3.10+, [Ollama](https://ollama.com) and Power BI Desktop (free, Windows).
 Copy `.env.example` to `.env`, and download the four order files into `data/input/` (commands in
@@ -162,7 +162,7 @@ writes the eleven summaries in about three minutes on a laptop CPU.
 └── docs/                the diagrams and charts in this README
 ```
 
-## Limits
+## ⚠️ Limits
 
 - The suppliers are marketplace sellers that ship straight to customers; the hand-over deadline is the
   marketplace's shipping limit for each item.
@@ -175,7 +175,7 @@ writes the eleven summaries in about three minutes on a laptop CPU.
   the trend charts run from March 2017 to August 2018, the months with at least 1,000 deliveries.
 - The watch-list rule (30 lines, twice the late rate) is a starting point to tune with the buyers.
 
-## Data
+## 🗂️ Data
 
 Order history of Olist, a Brazilian marketplace, from 2016 to 2018, anonymised and published by Olist
 in [olist/work-at-olist-data](https://github.com/olist/work-at-olist-data) (MIT licence) and on Kaggle as
