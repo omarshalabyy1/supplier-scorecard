@@ -10,6 +10,8 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
+<p align="center"><b>New client? See <a href="docs/new-client.md">docs/new-client.md</a>.</b></p>
+
 ## The problem
 
 Buyers find out which suppliers deliver late or short when the shelf is already empty. The order
@@ -46,7 +48,7 @@ a late delivery can be traced back to where it started.
 | OTIF | On-time lines ÷ all order lines |
 | Fill rate | Delivered lines ÷ all order lines |
 | Late rate | Late lines ÷ delivered lines |
-| Watch list | A supplier with 30+ delivered lines and a late rate at least twice the rate of all suppliers |
+| Watch list | A supplier with 30+ delivered lines and a late rate at least twice the rate of all suppliers (both numbers are client settings) |
 
 The rules are written once, as two DAX calculated columns, and every measure filters on them
 ([`powerbi/03-measures.dax`](powerbi/03-measures.dax)).
@@ -103,18 +105,24 @@ the numbers each page must show, and a 38-step build checklist.
 
 ## How it is built
 
-- **Load** ([`load.py`](load.py), [`sql/`](sql/)): the source files go into a `raw` schema as they are,
-  with primary keys that stop duplicates. [`02_star.sql`](sql/02_star.sql) builds the star schema:
-  `fact_order_line` (one row per order line, with both promises' dates) and `dim_supplier`,
-  `dim_product` (category and department) and `dim_date`. [`03_checks.sql`](sql/03_checks.sql) checks
-  that every line reached the fact table, every category has a department, every department has a
-  buyer and no delivery comes before its purchase. The load runs in one transaction: if a check fails,
-  nothing changes and the report keeps the last good load.
+- **Client settings** ([`config/client.yaml`](config/client.yaml), read only through `load_config()` in
+  [`config.py`](config.py)): the client's name, input file names, rule thresholds, summary week and model,
+  chart window and colours. The password is in `.env`. [`theme.py`](theme.py) writes the Power BI theme
+  from the colours.
+- **Load** ([`load.py`](load.py), [`sql/`](sql/)): `load.py` first checks every input file in
+  `data/input/` and its columns, then loads the needed columns into a `raw` schema, where primary keys
+  stop duplicates and a foreign key stops a product category missing from the categories file.
+  [`02_star.sql`](sql/02_star.sql) builds the star schema: `fact_order_line` (one row per order line,
+  with both promises' dates), `dim_supplier`, `dim_product` (category and department), `dim_date`, and
+  `client_setting` (the rule thresholds). [`03_checks.sql`](sql/03_checks.sql) checks that every line
+  reached the fact table, every department has a buyer, every promised date is in the calendar and no
+  delivery comes before its purchase. The load runs in one transaction: if a check fails, nothing
+  changes and the report keeps the last good load.
 - **Rules:** `Delivery` and `Handover` calculated columns, then 19 measures built on them, from
-  `Order Lines` to `Watch List Share of Late %`.
+  `Order Lines` to `Watch List Share of Late %`; the thresholds come from `client_setting`.
 - **Secure:** row-level security with one dynamic role. `buyer` maps each buyer's sign-in to a
   department, and `USERPRINCIPALNAME()` picks it, so adding a buyer means adding one row to
-  [`data/buyers.csv`](data/buyers.csv), not a new role.
+  [`data/input/buyers.csv`](data/input/buyers.csv), not a new role.
 - **Explain:** [`summarize.py`](summarize.py) with Pydantic for the model's JSON output and the three
   checks above.
 - **Report:** the scorecard reads the `star` schema directly; Refresh in Power BI after a load.
@@ -122,33 +130,38 @@ the numbers each page must show, and a 38-step build checklist.
 ## Run it
 
 You need Docker Desktop, Python 3.10+, [Ollama](https://ollama.com) and Power BI Desktop (free, Windows).
+Copy `.env.example` to `.env`, and download the four order files into `data/input/` (commands in
+[`data/input/README.md`](data/input/README.md)). Then:
 
 ```bash
 docker compose up -d
 pip install -r requirements.txt
 python load.py
 ollama pull llama3.2:3b
-python summarize.py 2018-08-27
+python summarize.py
+python theme.py
 python -m nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 ```
 
-Then build the report with [`powerbi/README.md`](powerbi/README.md). PostgreSQL listens on
-`localhost:5435`, on this computer only.
+Then build the report with [`powerbi/08-build-checklist.md`](powerbi/08-build-checklist.md). PostgreSQL
+listens on `127.0.0.1:5435`, on this computer only.
 
 If Ollama crashes while loading the model on an older NVIDIA card, run it on the CPU: set
 `CUDA_VISIBLE_DEVICES=-1` and `GGML_VK_VISIBLE_DEVICES=-1`, then start `ollama serve`. The 3B model
 writes the eleven summaries in about three minutes on a laptop CPU.
 
 ```
-├── data/raw/            the five source files, unchanged
-├── data/departments.csv which department buys each product category
-├── data/buyers.csv      which buyer owns each department (for row-level security)
+├── config/client.yaml   every client value (name, input files, rules, summary, chart window, colours)
+├── config.py            load_config(): the only reader of client values
+├── .env.example         the database password (copy to .env, never committed)
+├── data/input/          the client's six files, with a README of their columns
 ├── sql/                 raw tables, star schema, load checks, number checks
-├── load.py              files → PostgreSQL → star schema → checks
+├── load.py              input check → PostgreSQL → star schema → checks
 ├── summarize.py         the weekly summaries, written by a local LLM and checked
+├── theme.py             the Power BI theme from the client's colours
 ├── analysis/            the notebook that computes every number
 ├── powerbi/             the step-by-step report build
-└── docs/                the diagrams and charts in this README
+└── docs/                the diagrams and charts in this README, and new-client.md
 ```
 
 ## Limits
@@ -160,8 +173,8 @@ writes the eleven summaries in about three minutes on a laptop CPU.
 - "In full" means delivered: the data has no partial quantities, so a line is delivered or not.
 - A late delivery after a late hand-over is linked to the supplier, not proven to be caused by it: the
   carrier may also have been slow.
-- The history ends in August 2018 (later months hold only the orders that were already closed), and
-  the trend charts leave out months with fewer than 1,000 deliveries.
+- The history ends in August 2018 (later months hold only the orders that were already closed), so
+  the trend charts run from March 2017 to August 2018, the months with at least 1,000 deliveries.
 - The watch-list rule (30 lines, twice the late rate) is a starting point to tune with the buyers.
 
 ## Data
@@ -169,9 +182,11 @@ writes the eleven summaries in about three minutes on a laptop CPU.
 Order history of Olist, a Brazilian marketplace, from 2016 to 2018, anonymised and published by Olist
 in [olist/work-at-olist-data](https://github.com/olist/work-at-olist-data) (MIT licence) and on Kaggle as
 the [Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
-(CC BY-NC-SA 4.0). Five of its files are in `data/raw/`, unchanged. Sellers are treated as suppliers.
-`data/departments.csv` (which department buys each category) and `data/buyers.csv` (made-up buyer
-addresses at example.com) are this project's own. This is not work for Olist.
+(CC BY-NC-SA 4.0). Four of its files are the inputs; they are not committed, so download them into
+`data/input/` (commands in [`data/input/README.md`](data/input/README.md)). Sellers are treated as
+suppliers. `data/input/categories.csv` takes its category codes and English names from the same
+dataset (CC BY-NC-SA 4.0) and adds this project's departments; `data/input/buyers.csv` (made-up buyer
+addresses at example.com) is this project's own. This is not work for Olist.
 
 ---
 

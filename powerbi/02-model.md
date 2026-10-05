@@ -7,7 +7,7 @@ that only the security and the summary visual use.
 dim_supplier (1) ──┐
 dim_product  (1) ──┼──< fact_order_line (many)
 dim_date     (1) ──┘
-buyer, weekly_summary: no relationship (read by row-level security and one table visual)
+buyer, weekly_summary, client_setting: no relationship (read by security, one table visual and the DAX)
 _Measures: holds every measure
 ```
 
@@ -27,6 +27,7 @@ competing date hierarchy.
 | `dim_date` | day | `date` | 774 | every promised delivery date; the report's time axis |
 | `buyer` | buyer | `buyer_email` | 10 | which department each buyer owns; read only by security |
 | `weekly_summary` | department and week | `week_start` + `department` | 11 | the text written by `summarize.py` |
+| `client_setting` | (one row) | | 1 | the client's rule thresholds from `config/client.yaml`; the DAX reads them, so no measure holds a client's number |
 | `_Measures` | | | | one home for every measure |
 
 ## Relationships
@@ -40,8 +41,9 @@ Delete). Then **Home → Manage relationships → New**, three times:
 | 2 | `fact_order_line[product_key]` | `dim_product[product_key]` | Many to one (*:1) | Single | Yes | each line has one product; this is the path the security filter travels |
 | 3 | `fact_order_line[due_date]` | `dim_date[date]` | Many to one (*:1) | Single | Yes | a month on the scorecard means "deliveries promised that month", the date both on time and late are judged against |
 
-`buyer` and `weekly_summary` get no relationship: security reads `buyer` inside its own filter, and
-`weekly_summary` is filtered by its own security rule. Single direction everywhere: filters flow from
+`buyer`, `weekly_summary` and `client_setting` get no relationship: security reads `buyer` inside its
+own filter, `weekly_summary` is filtered by its own security rule, and the DAX reads `client_setting` with
+`MAX()`. Single direction everywhere: filters flow from
 the dimensions to the fact, never back.
 
 ## Mark the date table
@@ -79,11 +81,11 @@ and every measure filters on them.
 Right-click → **Hide in report view**. Why: keys and source ids are for joins and tracing, not for
 visuals, and hiding them keeps the field list short.
 
-- `fact_order_line`: `supplier_key`, `product_key`, `handover_due`, `handed_over`, `price`, `freight_value`
+- `fact_order_line`: `supplier_key`, `product_key`, `handover_due`, `handed_over`
 - `dim_supplier`: `supplier_key`, `seller_id`
 - `dim_product`: `product_key`, `product_id`
 - `dim_date`: `month_sort`
-- the whole `buyer` table (right-click the table → **Hide in report view**)
+- the whole `buyer` and `client_setting` tables (right-click the table → **Hide in report view**)
 
 `order_item_id` stays visible: the supplier detail table needs it, or two lines of one order with the
 same dates would merge into one row.
@@ -117,7 +119,7 @@ weekly_summary[department]
 
 4. **Save.**
 
-Why one dynamic role and not ten fixed ones: a new buyer is one new row in `data/buyers.csv`, not a new
+Why one dynamic role and not ten fixed ones: a new buyer is one new row in `inputs.buyers`, not a new
 role. Filtering `dim_product` reaches the fact table through relationship 2, so every card, chart and
 supplier list shrinks to the buyer's department; the watch-list threshold then becomes that
 department's own (twice its late rate). `weekly_summary` has no relationship, so it gets its own rule,
@@ -125,4 +127,4 @@ and the "All departments" summary is hidden from buyers.
 
 **Test it:** **Modeling → View as** → tick **Other user**, type `buyer.electronics@example.com`, tick
 **Buyer** → **OK**. Expected numbers: `06-checks.md`, "Row-level security". **Stop viewing** when done.
-In the Power BI service, put each buyer's real sign-in in `data/buyers.csv` and add them to the role.
+In the Power BI service, put each buyer's real sign-in in the buyers file (`inputs.buyers`) and add them to the role.

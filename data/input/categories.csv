@@ -1,0 +1,74 @@
+product_category_name,category,department
+agro_industria_e_comercio,agro_industry_and_commerce,"Tools, Garden & Auto"
+alimentos,food,"Food, Drink & Pets"
+alimentos_bebidas,food_drink,"Food, Drink & Pets"
+artes,art,"Toys, Baby & Gifts"
+artes_e_artesanato,arts_and_craftmanship,"Toys, Baby & Gifts"
+artigos_de_festas,party_supplies,"Toys, Baby & Gifts"
+artigos_de_natal,christmas_supplies,"Toys, Baby & Gifts"
+audio,audio,Electronics
+automotivo,auto,"Tools, Garden & Auto"
+bebes,baby,"Toys, Baby & Gifts"
+bebidas,drinks,"Food, Drink & Pets"
+beleza_saude,health_beauty,Health & Beauty
+brinquedos,toys,"Toys, Baby & Gifts"
+cama_mesa_banho,bed_bath_table,Home & Furniture
+casa_conforto,home_confort,Home & Furniture
+casa_conforto_2,home_comfort_2,Home & Furniture
+casa_construcao,home_construction,"Tools, Garden & Auto"
+cds_dvds_musicais,cds_dvds_musicals,"Books, Media & Stationery"
+cine_foto,cine_photo,Electronics
+climatizacao,air_conditioning,Kitchen & Appliances
+consoles_games,consoles_games,Electronics
+construcao_ferramentas_construcao,construction_tools_construction,"Tools, Garden & Auto"
+construcao_ferramentas_ferramentas,costruction_tools_tools,"Tools, Garden & Auto"
+construcao_ferramentas_iluminacao,construction_tools_lights,"Tools, Garden & Auto"
+construcao_ferramentas_jardim,costruction_tools_garden,"Tools, Garden & Auto"
+construcao_ferramentas_seguranca,construction_tools_safety,"Tools, Garden & Auto"
+cool_stuff,cool_stuff,"Toys, Baby & Gifts"
+dvds_blu_ray,dvds_blu_ray,"Books, Media & Stationery"
+eletrodomesticos,home_appliances,Kitchen & Appliances
+eletrodomesticos_2,home_appliances_2,Kitchen & Appliances
+eletronicos,electronics,Electronics
+eletroportateis,small_appliances,Kitchen & Appliances
+esporte_lazer,sports_leisure,Sports & Fashion
+fashion_bolsas_e_acessorios,fashion_bags_accessories,Sports & Fashion
+fashion_calcados,fashion_shoes,Sports & Fashion
+fashion_esporte,fashion_sport,Sports & Fashion
+fashion_roupa_feminina,fashio_female_clothing,Sports & Fashion
+fashion_roupa_infanto_juvenil,fashion_childrens_clothes,Sports & Fashion
+fashion_roupa_masculina,fashion_male_clothing,Sports & Fashion
+fashion_underwear_e_moda_praia,fashion_underwear_beach,Sports & Fashion
+ferramentas_jardim,garden_tools,"Tools, Garden & Auto"
+flores,flowers,"Toys, Baby & Gifts"
+fraldas_higiene,diapers_and_hygiene,Health & Beauty
+industria_comercio_e_negocios,industry_commerce_and_business,"Tools, Garden & Auto"
+informatica_acessorios,computers_accessories,Electronics
+instrumentos_musicais,musical_instruments,"Books, Media & Stationery"
+la_cuisine,la_cuisine,Kitchen & Appliances
+livros_importados,books_imported,"Books, Media & Stationery"
+livros_interesse_geral,books_general_interest,"Books, Media & Stationery"
+livros_tecnicos,books_technical,"Books, Media & Stationery"
+malas_acessorios,luggage_accessories,Sports & Fashion
+market_place,market_place,Other
+moveis_colchao_e_estofado,furniture_mattress_and_upholstery,Home & Furniture
+moveis_cozinha_area_de_servico_jantar_e_jardim,kitchen_dining_laundry_garden_furniture,Home & Furniture
+moveis_decoracao,furniture_decor,Home & Furniture
+moveis_escritorio,office_furniture,Home & Furniture
+moveis_quarto,furniture_bedroom,Home & Furniture
+moveis_sala,furniture_living_room,Home & Furniture
+musica,music,"Books, Media & Stationery"
+papelaria,stationery,"Books, Media & Stationery"
+pc_gamer,pc_gamer,Electronics
+pcs,computers,Electronics
+perfumaria,perfumery,Health & Beauty
+pet_shop,pet_shop,"Food, Drink & Pets"
+portateis_casa_forno_e_cafe,small_appliances_home_oven_and_coffee,Kitchen & Appliances
+portateis_cozinha_e_preparadores_de_alimentos,portateis_cozinha_e_preparadores_de_alimentos,Kitchen & Appliances
+relogios_presentes,watches_gifts,Sports & Fashion
+seguros_e_servicos,security_and_services,"Tools, Garden & Auto"
+sinalizacao_e_seguranca,signaling_and_security,"Tools, Garden & Auto"
+tablets_impressao_imagem,tablets_printing_image,Electronics
+telefonia,telephony,Electronics
+telefonia_fixa,fixed_telephony,Electronics
+utilidades_domesticas,housewares,Kitchen & Appliances

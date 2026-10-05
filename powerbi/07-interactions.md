@@ -84,7 +84,7 @@ table is a list to read.
 
 | Level | Where | Filter | Why |
 |---|---|---|---|
-| Visual | page 1 #10, page 3 #10 | `dim_date[date]` on or after 1 March 2017 and on or before 31 August 2018 | the months with at least 1,000 deliveries; the first and last months are too thin to judge |
+| Visual | page 1 #10, page 3 #10 | `dim_date[date]` on or after `report.trend_from` and on or before `report.trend_to` (`config/client.yaml`) | the months with enough deliveries to judge; the first and last months of a history are often thin |
 | Visual | page 1 #12 | `weekly_summary[week_start]` Top 1 by Latest | show only the newest week's summaries |
 | Visual | page 2 #8 | `Delivered Lines` is greater than or equal to 1 | list only suppliers that delivered something |
 | Visual | page 3 #8 | `Handover` is Late hand-over or On-time hand-over | lines never handed over have no hand-over to judge |

@@ -1,4 +1,5 @@
 // Supplier scorecard: every rule and measure, in the order to paste them.
+// The client's thresholds come from the one-row client_setting table (rules in config/client.yaml).
 // Calculated columns go on fact_order_line (Table tools -> New column).
 // Measures go on _Measures (Home -> New measure). Set the format string and display folder shown above each one.
 
@@ -7,28 +8,30 @@
 // Calculated columns on fact_order_line: the rules, written once
 // ======================================================================
 
-// Delivery: "On time" if the customer got it on or before the promised date, "Late" if after,
-// "Not delivered" if it never arrived. In full = delivered.
+// Delivery: "On time" if the customer got it on or before the promised date plus the grace days,
+// "Late" if after, "Not delivered" if it never arrived. In full = delivered.
 Delivery =
 VAR _Delivered = fact_order_line[delivered_date]
 VAR _Promised = fact_order_line[due_date]
+VAR _GraceDays = MAX ( client_setting[on_time_grace_days] )
 RETURN
     SWITCH (
         TRUE (),
         ISBLANK ( _Delivered ), "Not delivered",
-        _Delivered <= _Promised, "On time",
+        _Delivered <= _Promised + _GraceDays, "On time",
         "Late"
     )
 
-// Handover: did the supplier hand the item to the carrier by its own deadline?
+// Handover: did the supplier hand the item to the carrier by its own deadline plus the grace hours?
 Handover =
 VAR _HandedOver = fact_order_line[handed_over]
 VAR _Deadline = fact_order_line[handover_due]
+VAR _GraceHours = MAX ( client_setting[handover_grace_hours] )
 RETURN
     SWITCH (
         TRUE (),
         ISBLANK ( _HandedOver ), "Not handed over",
-        _HandedOver <= _Deadline, "On-time hand-over",
+        _HandedOver <= _Deadline + _GraceHours / 24, "On-time hand-over",
         "Late hand-over"
     )
 
@@ -85,14 +88,16 @@ CALCULATE (
 Share of Late Deliveries % =
 DIVIDE ( [Late Lines], CALCULATE ( [Late Lines], REMOVEFILTERS ( dim_supplier ) ) )
 
-// Watch List Threshold %: twice the late rate of all suppliers in the current filter. Format: 0.0%
+// Watch List Threshold %: watch_list_times_overall times the late rate of all suppliers in the current filter. Format: 0.0%
 Watch List Threshold % =
-2 * CALCULATE ( [Late Rate %], REMOVEFILTERS ( dim_supplier ) )
+VAR _Times = MAX ( client_setting[watch_list_times_overall] )
+RETURN
+    _Times * CALCULATE ( [Late Rate %], REMOVEFILTERS ( dim_supplier ) )
 
-// On Watch List: 1 for a supplier with 30+ delivered lines and a late rate at or above the threshold, else 0;
-// blank outside a single supplier. Format: 0
+// On Watch List: 1 for a supplier with at least watch_list_min_lines delivered lines and a late rate at or above
+// the threshold, else 0; blank outside a single supplier. Format: 0
 On Watch List =
-VAR _EnoughLines = [Delivered Lines] >= 30
+VAR _EnoughLines = [Delivered Lines] >= MAX ( client_setting[watch_list_min_lines] )
 VAR _TooLate = [Late Rate %] >= [Watch List Threshold %]
 RETURN
     IF ( HASONEVALUE ( dim_supplier[supplier_key] ), INT ( _EnoughLines && _TooLate ) )

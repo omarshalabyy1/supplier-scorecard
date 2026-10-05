@@ -5,7 +5,8 @@ it is off, fix that step first.
 
 ## Prepare the data (in the repo folder)
 
-1. Start Docker Desktop, then:
+1. First time only: copy `.env.example` to `.env`, and put the four order files in `data/input/` (the
+   demo's download commands are in `data/input/README.md`). Start Docker Desktop, then:
 
    ```bash
    docker compose up -d
@@ -38,10 +39,11 @@ it is off, fix that step first.
    ollama pull llama3.2:3b
    ```
 
-6. Write the weekly summaries (about three minutes). `load.py` empties them, so run this after every load:
+6. Write the weekly summaries for `summary.week` in `config/client.yaml` (about three minutes). `load.py`
+   empties them, so run this after every load:
 
    ```bash
-   python summarize.py 2018-08-27
+   python summarize.py
    ```
 
    **Check:** 11 lines, the first starting `All departments:` with 2035 order lines, a late rate of 2.5%,
@@ -58,14 +60,14 @@ it is off, fix that step first.
 
 ## Power Query (`01-power-query.md`)
 
-10. **Home → Transform data.** Create `Warehouse` (connect with user and password `scorecard`, without
-    encryption if asked) and untick its **Enable load**.
-11. Create the six queries in this order, pasting each one's M code: `fact_order_line`, `dim_supplier`,
-    `dim_product`, `dim_date`, `buyer`, `weekly_summary`.
+10. **Home → Transform data.** Create `Warehouse` (connect with `warehouse.user` and `DB_PASSWORD`, demo
+    `scorecard` and `scorecard`, without encryption if asked) and untick its **Enable load**.
+11. Create the seven queries in this order, pasting each one's M code: `fact_order_line`, `dim_supplier`,
+    `dim_product`, `dim_date`, `buyer`, `weekly_summary`, `client_setting`.
 12. **Home → Close & Apply.** Then **Home → Enter data**, name it `_Measures`, **Load**.
 13. Open **Table view** and click each table; the row count is at the bottom left.
     **Check:** fact_order_line 112,650 · dim_supplier 3,095 · dim_product 32,951 · dim_date 774 ·
-    buyer 10 · weekly_summary 11.
+    buyer 10 · weekly_summary 11 · client_setting 1.
 
 ## Model (`02-model.md`)
 
@@ -75,7 +77,7 @@ it is off, fix that step first.
 16. Sort `dim_date[month]` by `month_sort`.
 17. Set the column formats and summarization from the table in `02-model.md`.
 18. Add the calculated columns `Delivery` and `Handover` to `fact_order_line` (top of `03-measures.dax`).
-19. Hide the columns and the `buyer` table listed under "Hidden columns".
+19. Hide the columns and the `buyer` and `client_setting` tables listed under "Hidden columns".
 
 ## Measures (`03-measures.dax`)
 

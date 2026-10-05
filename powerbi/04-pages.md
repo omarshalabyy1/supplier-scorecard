@@ -46,7 +46,7 @@ The question: how are deliveries doing, and in which department?
 | 7 | Card | 648, 88, 196, 96 | `[Fill Rate %]` | Title "Fill rate" |
 | 8 | Card | 856, 88, 196, 96 | `[Late Rate %]` | Title "Late rate" |
 | 9 | Card | 1064, 88, 192, 96 | `[Watch List Suppliers]` | Title "Suppliers on the watch list" |
-| 10 | Line chart | 24, 200, 616, 260 | X-axis: `dim_date[month]`; Y-axis: `[Late Rate %]`; Tooltips: `[Delivered Lines]`, `[Late Lines]` | Title "Late rate by promised month". X-axis type: Categorical. Sort axis: `month`, ascending (it follows `month_sort`). Line colour: theme colour 1. Markers on. Data labels off. Filter on this visual: `dim_date[date]`, Advanced filtering, "is on or after" 1 March 2017 **And** "is on or before" 31 August 2018 (the months with at least 1,000 deliveries, as in the notebook) |
+| 10 | Line chart | 24, 200, 616, 260 | X-axis: `dim_date[month]`; Y-axis: `[Late Rate %]`; Tooltips: `[Delivered Lines]`, `[Late Lines]` | Title "Late rate by promised month". X-axis type: Categorical. Sort axis: `month`, ascending (it follows `month_sort`). Line colour: theme colour 1. Markers on. Data labels off. Filter on this visual: `dim_date[date]`, Advanced filtering, "is on or after" `report.trend_from` **And** "is on or before" `report.trend_to` from `config/client.yaml` (the months with enough deliveries to judge, as in the notebook) |
 | 11 | Clustered bar chart | 656, 200, 600, 260 | Y-axis: `dim_product[department]`; X-axis: `[Late Rate %]`; Tooltips: `[Delivered Lines]`, `[Late Lines]`, `[OTIF %]` | Title "Late rate by department". Sort by Late Rate %, descending. Bar colour: theme colour 1. Data labels on |
 | 12 | Table | 24, 476, 1232, 228 | `weekly_summary[department]`, `weekly_summary[summary]` | Title "This week's summary". Filter on this visual: drag `weekly_summary[week_start]` into it, Filter type **Top N**, Show items **Top 1**, By value: `week_start` set to **Latest**, Apply. Sort by department, ascending. Values → Text wrap on. Column width: department 220 (drag the header edge). Totals off |
 
@@ -56,7 +56,7 @@ The question: which suppliers make deliveries late?
 
 | # | Visual | x, y, w, h | Fields | Settings |
 |---|---|---|---|---|
-| 1 | Text box | 24, 16, 780, 56 | "Suppliers" and, on a new line, "Watch list: 30+ delivered lines and a late rate at least twice the rate of all suppliers" | as page 1 #1 |
+| 1 | Text box | 24, 16, 780, 56 | "Suppliers" and, on a new line, "Watch list: at least `rules.watch_list_min_lines` delivered lines and a late rate at least `rules.watch_list_times_overall` times the rate of all suppliers", with the client's two numbers typed in | as page 1 #1 |
 | 2 | Slicer | 820, 12, 216, 64 | `dim_product[department]` | synced copy of page 1 #2 |
 | 3 | Slicer | 1048, 12, 208, 64 | `dim_date[date]` | synced copy of page 1 #3 |
 | 4 | Card | 24, 88, 300, 96 | `[Watch List Suppliers]` | Title "Suppliers on the watch list" |
@@ -64,7 +64,7 @@ The question: which suppliers make deliveries late?
 | 6 | Card | 648, 88, 300, 96 | `[Watch List Share of Late %]` | Title "Their share of late deliveries" |
 | 7 | Card | 960, 88, 296, 96 | `[Watch List Threshold %]` | Title "Watch-list late rate" |
 | 8 | Table | 24, 200, 776, 504 | `dim_supplier[supplier]`, `dim_supplier[state]`, `[Delivered Lines]`, `[Late Lines]`, `[Late Rate %]`, `[OTIF %]`, `[Late Hand-over Rate %]`, `[Share of Late Deliveries %]`, `[On Watch List]` | Title "Supplier scorecard". Sort by Late Lines, descending. Filter on this visual: `Delivered Lines` is greater than or equal to 1. Cell elements: `Late Lines` → Data bars on, positive bar theme colour 1; `On Watch List` → Icons on → Format style Rules, "If value = 1 then" the flag icon, no icon otherwise. Totals on |
-| 9 | Scatter chart | 816, 200, 440, 504 | Values: `dim_supplier[supplier]`; X-axis: `[Delivered Lines]`; Y-axis: `[Late Rate %]`; Tooltips: `[Late Lines]`, `[On Watch List]` | Title "Volume against late rate". X-axis scale type: Log. Markers → Colors → fx → Format style Rules on `On Watch List`: if value = 1 then theme colour 1, if value = 0 then theme colour 6. Analytics pane: Y-axis constant line, Value fx → Field value `Watch List Threshold %`, colour danger, data label on with text "watch list"; X-axis constant line, value 30, colour theme colour 4, dashed |
+| 9 | Scatter chart | 816, 200, 440, 504 | Values: `dim_supplier[supplier]`; X-axis: `[Delivered Lines]`; Y-axis: `[Late Rate %]`; Tooltips: `[Late Lines]`, `[On Watch List]` | Title "Volume against late rate". X-axis scale type: Log. Markers → Colors → fx → Format style Rules on `On Watch List`: if value = 1 then theme colour 1, if value = 0 then theme colour 6. Analytics pane: Y-axis constant line, Value fx → Field value `Watch List Threshold %`, colour danger, data label on with text "watch list"; X-axis constant line, value `rules.watch_list_min_lines`, colour theme colour 4, dashed |
 
 Right-click a supplier in #8 or #9 → **Drill through → Supplier detail**.
 

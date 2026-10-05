@@ -19,6 +19,7 @@ same way.
 | `dim_date` | 774 |
 | `buyer` | 10 |
 | `weekly_summary` | 11 |
+| `client_setting` | 1 (0, 0, 30, 2) |
 
 ## Page 1 · Scorecard
 
@@ -30,7 +31,7 @@ same way.
 | 7 | Fill rate | 97.8% |
 | 8 | Late rate | 6.6% |
 | 9 | Suppliers on the watch list | 61 |
-| 10 | Line chart | 18 months, Mar 2017 to Aug 2018; highest Mar 2018 at 16.3% |
+| 10 | Line chart | 18 months, Mar 2017 to Aug 2018 (the demo's `report.trend_from` and `trend_to`); highest Mar 2018 at 16.3% |
 | 11 | Bar chart | the labels in the table below, Health & Beauty on top |
 | 12 | Summary table | 11 rows (10 departments and All departments), week of 27 Aug 2018 |
 

@@ -1,6 +1,6 @@
 """Write each department's weekly summary with a local LLM, and check it before saving.
 
-Run: python summarize.py 2018-08-27   (the Monday of the week to summarise; Ollama must be running)
+Run: python summarize.py   (Ollama must be running; the week and the model are in config/client.yaml, summary.*)
 
 The numbers come from the warehouse; the model only puts them into words. Three checks guard every
 summary: each number in it must be one of the facts, each supplier it names must be the one in the
@@ -9,26 +9,27 @@ again; after three tries the run stops and saves nothing.
 """
 import json
 import re
-import sys
 from datetime import date
 
 import psycopg
 import requests
 from pydantic import BaseModel, Field, ValidationError
 
-DB = "postgresql://scorecard:scorecard@localhost:5435/scorecard"
-OLLAMA = "http://localhost:11434/api/chat"
-MODEL = "llama3.2:3b"
+from config import load_config
 
-# The scorecard rules, the same as the DAX measures, for one week and the week before it.
+OLLAMA = "http://localhost:11434/api/chat"
+
+# The scorecard rules, the same as the DAX measures (grace days from star.client_setting),
+# for one week and the week before it.
 FACTS_SQL = """
 WITH line AS (
-    SELECT DATE_TRUNC('week', f.due_date)::date = %(week)s                   AS this_week,
-           f.delivered_date IS NOT NULL                                      AS delivered,
-           f.delivered_date IS NOT NULL AND f.delivered_date <= f.due_date   AS on_time,
-           f.delivered_date > f.due_date                                     AS late
+    SELECT DATE_TRUNC('week', f.due_date)::date = %(week)s                                       AS this_week,
+           f.delivered_date IS NOT NULL                                                          AS delivered,
+           f.delivered_date IS NOT NULL AND f.delivered_date <= f.due_date + c.on_time_grace_days AS on_time,
+           f.delivered_date > f.due_date + c.on_time_grace_days                                  AS late
     FROM star.fact_order_line f
     JOIN star.dim_product p USING (product_key)
+    CROSS JOIN star.client_setting c
     WHERE DATE_TRUNC('week', f.due_date)::date IN (%(week)s, %(week)s - 7)
       AND (%(department)s::text IS NULL OR p.department = %(department)s)
 )
@@ -47,8 +48,9 @@ SELECT s.supplier, COUNT(*) AS late_lines
 FROM star.fact_order_line f
 JOIN star.dim_product p  USING (product_key)
 JOIN star.dim_supplier s USING (supplier_key)
+CROSS JOIN star.client_setting c
 WHERE DATE_TRUNC('week', f.due_date)::date = %(week)s
-  AND f.delivered_date > f.due_date
+  AND f.delivered_date > f.due_date + c.on_time_grace_days
   AND (%(department)s::text IS NULL OR p.department = %(department)s)
 GROUP BY s.supplier
 ORDER BY late_lines DESC, s.supplier
@@ -92,10 +94,10 @@ def problems(text, facts, trend):
     return found
 
 
-def write_summary(facts, trend):
+def write_summary(facts, trend, model):
     for _ in range(3):
         reply = requests.post(OLLAMA, timeout=300, json={
-            "model": MODEL,
+            "model": model,
             "stream": False,
             "format": Summary.model_json_schema(),
             "options": {"temperature": 0.3},
@@ -116,11 +118,12 @@ def write_summary(facts, trend):
     raise SystemExit(f"No checked summary for {facts['department']} after three tries; nothing saved.")
 
 
-week = date.fromisoformat(sys.argv[1])
+cfg = load_config()
+week = date.fromisoformat(cfg["summary"]["week"])
 if week.weekday() != 0:
-    raise SystemExit("Pass the Monday that starts the week, for example 2018-08-27.")
+    raise SystemExit("summary.week in config/client.yaml must be a Monday (the start of the week).")
 
-with psycopg.connect(DB) as conn:
+with psycopg.connect(cfg["db_url"]) as conn:
     departments = [None] + [d for (d,) in conn.execute("SELECT department FROM star.buyer ORDER BY department")]
     for department in departments:
         params = {"week": week, "department": department}
@@ -139,7 +142,7 @@ with psycopg.connect(DB) as conn:
         worst = conn.execute(WORST_SUPPLIER_SQL, params).fetchone()
         facts["supplier to follow up"] = f"{worst[0]} ({worst[1]} late lines)" if worst else "none, no late lines"
 
-        text = write_summary(facts, trend)
+        text = write_summary(facts, trend, cfg["summary"]["model"])
         conn.execute("""INSERT INTO star.weekly_summary (week_start, department, summary) VALUES (%s, %s, %s)
                         ON CONFLICT (week_start, department) DO UPDATE SET summary = EXCLUDED.summary, created_at = now()""",
                      (week, facts["department"], text))

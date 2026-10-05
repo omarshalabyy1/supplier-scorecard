@@ -1,10 +1,11 @@
 # The warehouse: one PostgreSQL, reachable from this computer only.
+# The password comes from .env (DB_PASSWORD); the port must match warehouse.port in config/client.yaml.
 services:
   postgres:
     image: postgres:17
     environment:
       POSTGRES_DB: scorecard
       POSTGRES_USER: scorecard
-      POSTGRES_PASSWORD: scorecard
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "127.0.0.1:5435:5432"

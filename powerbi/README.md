@@ -26,11 +26,11 @@ interaction and filter is written down, with the number to check at each step.
 
 | File | What it holds |
 |---|---|
-| `01-power-query.md` | the connection and the six queries: M code, columns, types, which load |
+| `01-power-query.md` | the connection and the seven queries: M code, columns, types, which load |
 | `02-model.md` | tables and grain, relationships, the date table, sort, formats, hidden columns, display folders, security, each with its reason |
 | `03-measures.dax` | the two calculated columns and the 19 measures, grouped by page, each with its format and folder |
 | `04-pages.md` | every page and visual in build order: fields, titles, sort, colours, positions, slicers |
-| `05-theme.json` | the theme shared by all the portfolio reports |
+| `05-theme.json` | the theme shared by all the portfolio reports, written by `python theme.py` from `report.colours` |
 | `06-checks.md` | the number every card, chart and table must show, including the view as one buyer |
 | `07-interactions.md` | what each click filters, the drill-through, and every filter |
 | `08-build-checklist.md` | the whole build as 38 numbered steps, from `docker compose up -d` to the last screenshot |

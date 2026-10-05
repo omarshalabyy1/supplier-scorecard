@@ -1,3 +1,7 @@
 __pycache__/
 .ipynb_checkpoints/
 .venv/
+.env
+data/input/*.csv
+!data/input/categories.csv
+!data/input/buyers.csv

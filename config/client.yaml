@@ -1,0 +1,41 @@
+# Everything a client changes, except secrets (those go in .env).
+# Read only through config.py (load_config). A key exists here only if something reads it.
+
+client:
+  name: Sample marketplace            # notebook chart titles
+
+warehouse:                            # the password is DB_PASSWORD in .env
+  host: 127.0.0.1
+  port: 5435                          # if you change it, change the ports line in docker-compose.yml too
+  database: scorecard
+  user: scorecard
+
+inputs:                               # file names in data/input/ (columns: data/input/README.md)
+  orders: olist_orders_dataset.csv
+  order_items: olist_order_items_dataset.csv
+  products: olist_products_dataset.csv
+  sellers: olist_sellers_dataset.csv
+  categories: categories.csv          # product category -> category name -> buying department
+  buyers: buyers.csv                  # buyer sign-in -> department (row-level security)
+
+rules:                                # written to star.client_setting; the DAX, the SQL and the notebook read them
+  on_time_grace_days: 0               # a delivery this many days after the promised date still counts as on time
+  handover_grace_hours: 0             # a hand-over this many hours after the supplier's deadline still counts as on time
+  watch_list_min_lines: 30            # a supplier needs at least this many delivered lines to be judged
+  watch_list_times_overall: 2         # ... and a late rate at least this many times the rate of all suppliers
+
+summary:                              # summarize.py
+  model: llama3.2:3b                  # the Ollama model
+  week: "2018-08-27"                  # the Monday of the week to summarise
+
+report:
+  title: Supplier scorecard           # the Power BI theme name
+  trend_from: "2017-03-01"            # the month charts start here (notebook and Power BI)...
+  trend_to: "2018-08-31"              # ...and end here: the months with enough deliveries to judge
+  colours:                            # the Power BI theme (python theme.py) and the notebook charts
+    data: ["#2563EB", "#0E1630", "#8DB0FF", "#4A5675", "#1D4FD7", "#C7D7FE"]   # 1st = main, 6th = everything else
+    text: "#0E1630"
+    muted: "#4A5675"
+    page: "#F4F6FB"
+    line: "#E2E7F1"
+    danger: "#C2410C"
