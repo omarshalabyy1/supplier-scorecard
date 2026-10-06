@@ -111,6 +111,14 @@ the numbers each page must show, and a 38-step build checklist.
 
 ## 🏗️ How it is built
 
+Every table, the tables it is built from, and its row count after one run:
+
+![Data flow, table by table](docs/data-flow.svg)
+
+The star schema the report reads:
+
+![The star schema](docs/data-model.svg)
+
 - **Client settings** ([`config/client.yaml`](config/client.yaml), read only through `load_config()` in
   [`config.py`](config.py)): the client's name, input file names, rule thresholds, summary week and model,
   chart window and colours. The password is in `.env`. [`theme.py`](theme.py) writes the Power BI theme

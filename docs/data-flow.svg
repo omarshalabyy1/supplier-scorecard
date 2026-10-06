@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 609" width="1000" height="609" role="img" aria-label="Data flow, table by table: 6 input files load into 6 raw tables (orders 99,441, order_items 112,650, categories 73, products 32,951, sellers 3,095, buyers 10 rows). The star schema builds fact_order_line (112,650 rows) from order items and orders, taking its keys from dim_supplier (3,095) and dim_product (32,951, with category and department), plus dim_date (774 days) and buyer (10). The rules in config/client.yaml become client_setting (1 row), and summarize.py, with a local llama3.2 model, writes weekly_summary (11 rows). Power BI reads the star schema into four pages and a Buyer role.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#64748B"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
+    .sub { font-size: 13.5px; fill: #CBD5E1; }
+    .layer { font-size: 14px; font-weight: 700; fill: #0B1220; }
+    .where { font-size: 12px; fill: #94A3B8; }
+    .name { font-size: 13px; fill: #F1F5F9; }
+    .count { font-size: 11.5px; fill: #94A3B8; }
+    .col { font-size: 12.5px; fill: #E2E8F0; }
+    .key { font-size: 11px; font-weight: 700; }
+    .edge { fill: none; stroke: #64748B; stroke-width: 1.4; }
+  </style>
+  <rect width="1000" height="609" rx="22" fill="url(#bg)"/>
+  <text x="40" y="50" class="title">Data flow, table by table</text>
+  <text x="40" y="74" class="sub">Every table in the warehouse and the tables it is built from. load.py fills raw and builds the star schema in one transaction.</text>
+  <rect x="30" y="96" width="140" height="26" rx="13" fill="#94A3B8"/><text x="100.0" y="114" class="layer" text-anchor="middle">Input files</text>
+  <text x="100.0" y="138" class="where" text-anchor="middle">data/input, config</text>
+  <rect x="215" y="96" width="170" height="26" rx="13" fill="#3B82F6"/><text x="300.0" y="114" class="layer" text-anchor="middle">1  Raw</text>
+  <text x="300.0" y="138" class="where" text-anchor="middle">schema raw, tables</text>
+  <rect x="470" y="96" width="200" height="26" rx="13" fill="#14B8A6"/><text x="570.0" y="114" class="layer" text-anchor="middle">2  Star schema</text>
+  <text x="570.0" y="138" class="where" text-anchor="middle">schema star, tables</text>
+  <rect x="825" y="96" width="145" height="26" rx="13" fill="#22C55E"/><text x="897.5" y="114" class="layer" text-anchor="middle">3  Power BI</text>
+  <text x="897.5" y="138" class="where" text-anchor="middle">reads schema star</text>
+  <rect x="30" y="150" width="140" height="262" rx="10" fill="#13233D" stroke="#94A3B8" stroke-opacity="0.7"/>
+  <text x="44" y="212" class="name" font-weight="700">6 CSV files</text>
+  <text x="44" y="232" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
+  <text x="44" y="252" class="count" style="fill:#CBD5E1;font-size:12.5px">4 order exports:</text>
+  <text x="44" y="272" class="count" style="fill:#CBD5E1;font-size:12.5px">orders, order items,</text>
+  <text x="44" y="292" class="count" style="fill:#CBD5E1;font-size:12.5px">products, sellers</text>
+  <text x="44" y="312" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
+  <text x="44" y="332" class="count" style="fill:#CBD5E1;font-size:12.5px">+ categories.csv</text>
+  <text x="44" y="352" class="count" style="fill:#CBD5E1;font-size:12.5px">+ buyers.csv</text>
+  <line x1="170" y1="166.0" x2="213" y2="166.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="212.0" x2="213" y2="212.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="258.0" x2="213" y2="258.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="304.0" x2="213" y2="304.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="350.0" x2="213" y2="350.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="396.0" x2="213" y2="396.0" class="edge" marker-end="url(#arrow)"/>
+  <rect x="30" y="449.0" width="140" height="32" rx="7" fill="#13233D" stroke="#94A3B8" stroke-opacity="0.8"/><text x="40" y="470.0" class="name">config/client.yaml</text>
+  <rect x="215" y="150" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="171" class="name">orders</text><text x="377" y="171" class="count" text-anchor="end">99,441</text>
+  <rect x="215" y="196" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="217" class="name">order_items</text><text x="377" y="217" class="count" text-anchor="end">112,650</text>
+  <rect x="215" y="242" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="263" class="name">categories</text><text x="377" y="263" class="count" text-anchor="end">73</text>
+  <rect x="215" y="288" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="309" class="name">products</text><text x="377" y="309" class="count" text-anchor="end">32,951</text>
+  <rect x="215" y="334" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="355" class="name">sellers</text><text x="377" y="355" class="count" text-anchor="end">3,095</text>
+  <rect x="215" y="380" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="401" class="name">buyers</text><text x="377" y="401" class="count" text-anchor="end">10</text>
+  <rect x="470" y="150" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="171" class="name">dim_date</text><text x="662" y="171" class="count" text-anchor="end">774</text>
+  <rect x="470" y="196" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="217" class="name">fact_order_line</text><text x="662" y="217" class="count" text-anchor="end">112,650</text>
+  <rect x="470" y="265.0" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="286.0" class="name">dim_product</text><text x="662" y="286.0" class="count" text-anchor="end">32,951</text>
+  <rect x="470" y="334" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="355" class="name">dim_supplier</text><text x="662" y="355" class="count" text-anchor="end">3,095</text>
+  <rect x="470" y="380" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="401" class="name">buyer</text><text x="662" y="401" class="count" text-anchor="end">10</text>
+  <rect x="470" y="449.0" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="470.0" class="name">client_setting</text><text x="662" y="470.0" class="count" text-anchor="end">1</text>
+  <rect x="470" y="495.0" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="516.0" class="name">weekly_summary</text><text x="662" y="516.0" class="count" text-anchor="end">11</text>
+  <path d="M385 166.0 C427 166.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 166.0 C427 166.0 427 212.0 468 212.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 212.0 C427 212.0 427 212.0 468 212.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 258.0 C427 258.0 427 281.0 468 281.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 304.0 C427 304.0 427 281.0 468 281.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 350.0 C427 350.0 427 350.0 468 350.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 396.0 C427 396.0 427 396.0 468 396.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="465.0" x2="468" y2="465.0" class="edge" marker-end="url(#arrow)"/>
+  <text x="300" y="457.0" class="where" text-anchor="middle">rules, passed in by load.py</text>
+  <rect x="215" y="495.0" width="170" height="32" rx="7" fill="#13233D" stroke="#A855F7" stroke-opacity="0.9"/><text x="225" y="516.0" class="name">summarize.py</text><text x="377" y="516.0" class="count" text-anchor="end">llama3.2</text>
+  <line x1="385" y1="511.0" x2="468" y2="511.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M670 281.0 C686 281.0 686 216.0 672 216.0" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <path d="M670 350.0 C700 350.0 700 208.0 672 208.0" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <path d="M712 150 H724 V527.0 H712" class="edge" stroke="#14B8A6"/>
+  <line x1="724" y1="338.5" x2="830" y2="338.5" class="edge" stroke="#22C55E" marker-end="url(#arrow)"/>
+  <rect x="832" y="226.5" width="138" height="224" rx="12" fill="#13233D" stroke="#22C55E" stroke-opacity="0.7"/>
+  <rect x="843" y="242.5" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="263.5" class="name" text-anchor="middle">Scorecard</text>
+  <rect x="843" y="288.5" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="309.5" class="name" text-anchor="middle">Suppliers</text>
+  <rect x="843" y="334.5" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="355.5" class="name" text-anchor="middle">Why late</text>
+  <rect x="843" y="380.5" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="401.5" class="name" text-anchor="middle">Supplier detail</text>
+  <text x="901" y="434.5" class="where" text-anchor="middle">+ Buyer role</text>
+  <text x="40" y="561.0" class="where">summarize.py reads fact_order_line, dim_product, dim_supplier, buyer and client_setting, and writes one summary per department, plus one for all departments, per week.</text>
+  <text x="40" y="581.0" class="where">dashed: fact_order_line takes supplier_key and product_key from the two dimensions.</text>
+</svg>
