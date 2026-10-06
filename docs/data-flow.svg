@@ -41,12 +41,12 @@
   <text x="44" y="312" class="count" style="fill:#CBD5E1;font-size:12.5px"></text>
   <text x="44" y="332" class="count" style="fill:#CBD5E1;font-size:12.5px">+ categories.csv</text>
   <text x="44" y="352" class="count" style="fill:#CBD5E1;font-size:12.5px">+ buyers.csv</text>
-  <line x1="170" y1="166.0" x2="213" y2="166.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="212.0" x2="213" y2="212.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="258.0" x2="213" y2="258.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="304.0" x2="213" y2="304.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="350.0" x2="213" y2="350.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="396.0" x2="213" y2="396.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="166.0" x2="214" y2="166.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="212.0" x2="214" y2="212.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="258.0" x2="214" y2="258.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="304.0" x2="214" y2="304.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="350.0" x2="214" y2="350.0" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="396.0" x2="214" y2="396.0" class="edge" marker-end="url(#arrow)"/>
   <rect x="30" y="449.0" width="140" height="32" rx="7" fill="#13233D" stroke="#94A3B8" stroke-opacity="0.8"/><text x="40" y="470.0" class="name">config/client.yaml</text>
   <rect x="215" y="150" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="171" class="name">orders</text><text x="377" y="171" class="count" text-anchor="end">99,441</text>
   <rect x="215" y="196" width="170" height="32" rx="7" fill="#13233D" stroke="#3B82F6" stroke-opacity="0.8"/><text x="225" y="217" class="name">order_items</text><text x="377" y="217" class="count" text-anchor="end">112,650</text>
@@ -61,21 +61,21 @@
   <rect x="470" y="380" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="401" class="name">buyer</text><text x="662" y="401" class="count" text-anchor="end">10</text>
   <rect x="470" y="449.0" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="470.0" class="name">client_setting</text><text x="662" y="470.0" class="count" text-anchor="end">1</text>
   <rect x="470" y="495.0" width="200" height="32" rx="7" fill="#13233D" stroke="#14B8A6" stroke-opacity="0.8"/><text x="480" y="516.0" class="name">weekly_summary</text><text x="662" y="516.0" class="count" text-anchor="end">11</text>
-  <path d="M385 166.0 C427 166.0 427 166.0 468 166.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 166.0 C427 166.0 427 212.0 468 212.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 212.0 C427 212.0 427 212.0 468 212.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 258.0 C427 258.0 427 281.0 468 281.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 304.0 C427 304.0 427 281.0 468 281.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 350.0 C427 350.0 427 350.0 468 350.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M385 396.0 C427 396.0 427 396.0 468 396.0" class="edge" marker-end="url(#arrow)"/>
-  <line x1="170" y1="465.0" x2="468" y2="465.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 166.0 H469" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 176.0 H421 Q427 176.0 427 182.0 V196.0 Q427 202.0 433 202.0 H469" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 212.0 H469" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 258.0 H421 Q427 258.0 427 264.0 V270.0 Q427 276.0 433 276.0 H469" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 304.0 H421 Q427 304.0 427 298.0 V292.0 Q427 286.0 433 286.0 H469" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 350.0 H469" class="edge" marker-end="url(#arrow)"/>
+  <path d="M385 396.0 H469" class="edge" marker-end="url(#arrow)"/>
+  <line x1="170" y1="465.0" x2="469" y2="465.0" class="edge" marker-end="url(#arrow)"/>
   <text x="300" y="457.0" class="where" text-anchor="middle">rules, passed in by load.py</text>
   <rect x="215" y="495.0" width="170" height="32" rx="7" fill="#13233D" stroke="#A855F7" stroke-opacity="0.9"/><text x="225" y="516.0" class="name">summarize.py</text><text x="377" y="516.0" class="count" text-anchor="end">llama3.2</text>
-  <line x1="385" y1="511.0" x2="468" y2="511.0" class="edge" marker-end="url(#arrow)"/>
-  <path d="M670 281.0 C686 281.0 686 216.0 672 216.0" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
-  <path d="M670 350.0 C700 350.0 700 208.0 672 208.0" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <line x1="385" y1="511.0" x2="469" y2="511.0" class="edge" marker-end="url(#arrow)"/>
+  <path d="M670 281.0 H684 Q690 281.0 690 275.0 V223.0 Q690 217.0 684 217.0 H671" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <path d="M670 350.0 H698 Q704 350.0 704 344.0 V213.0 Q704 207.0 698 207.0 H671" class="edge" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
   <path d="M712 150 H724 V527.0 H712" class="edge" stroke="#14B8A6"/>
-  <line x1="724" y1="338.5" x2="830" y2="338.5" class="edge" stroke="#22C55E" marker-end="url(#arrow)"/>
+  <line x1="724" y1="338.5" x2="831" y2="338.5" class="edge" stroke="#22C55E" marker-end="url(#arrow)"/>
   <rect x="832" y="226.5" width="138" height="224" rx="12" fill="#13233D" stroke="#22C55E" stroke-opacity="0.7"/>
   <rect x="843" y="242.5" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="263.5" class="name" text-anchor="middle">Scorecard</text>
   <rect x="843" y="288.5" width="116" height="32" rx="16" fill="#166534"/><text x="901" y="309.5" class="name" text-anchor="middle">Suppliers</text>
