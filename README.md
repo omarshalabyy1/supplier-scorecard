@@ -162,7 +162,7 @@ python -m nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 ```
 
 Then build the report with [`powerbi/08-build-checklist.md`](powerbi/08-build-checklist.md). PostgreSQL
-listens on `127.0.0.1:5435`, on this computer only.
+listens on port 5435, on this computer only.
 
 If Ollama crashes while loading the model on an older NVIDIA card, run it on the CPU: set
 `CUDA_VISIBLE_DEVICES=-1` and `GGML_VK_VISIBLE_DEVICES=-1`, then start `ollama serve`. The 3B model

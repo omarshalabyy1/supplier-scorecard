@@ -8,7 +8,7 @@ report all say the same thing.
 **Before you start** (steps 1 to 6 of `08-build-checklist.md`): `docker compose up -d`, `python load.py`,
 Ollama running on the CPU, `python summarize.py`. The database is then at `warehouse.host`:`warehouse.port`,
 database `warehouse.database`, user `warehouse.user` (all in `config/client.yaml`), password `DB_PASSWORD`
-(in `.env`). The M code below uses the demo's values (`127.0.0.1:5435`, `scorecard`); for a client, change
+(in `.env`). The M code below uses the demo's values (port 5435, `scorecard`); for a client, change
 the one line in `Warehouse`.
 
 ## 1. Warehouse: the connection (staging, not loaded)
