@@ -14,6 +14,8 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
+> 📖 **New to data?** [The project explained, from zero](docs/explained.md): every word, every number and the interview questions, in plain words.
+
 ## The problem
 
 Buyers find out which suppliers deliver late or short when the shelf is already empty. The order
@@ -192,7 +194,7 @@ writes the eleven summaries in about three minutes on a laptop CPU.
 - A late delivery after a late hand-over is linked to the supplier, not proven to be caused by it: the
   carrier may also have been slow.
 - The history ends in August 2018 (later months hold only the orders that were already closed), so
-  the trend charts run from March 2017 to August 2018, the months with at least 1,000 deliveries.
+  the trend charts run from March 2017, the first month with at least 1,000 deliveries, to August 2018.
 - The watch-list rule (30 lines, twice the late rate) is a starting point to tune with the buyers.
 
 ## 🗂️ Data
