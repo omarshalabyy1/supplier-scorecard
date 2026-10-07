@@ -161,7 +161,6 @@ The notebook ([`analysis/analysis.ipynb`](../analysis/analysis.ipynb)) prints al
 | **March 2017 to August 2018** | The months the trend charts show. | `report.trend_from` and `report.trend_to` in `config/client.yaml`. March 2017 is the first month with at least 1,000 delivered lines (2,985; February 2017 had 348). The history ends in August 2018. | `config/client.yaml`; notebook cell 10 |
 | **30 lines, twice the late rate** | The watch-list rule. | Settings `watch_list_min_lines` and `watch_list_times_overall` in `config/client.yaml`, copied into `star.client_setting`. | `config/client.yaml` |
 | **38 steps, 19 measures, 4 pages** | The size of the Power BI build. | Count of numbered steps in `powerbi/08-build-checklist.md` and of measures in `powerbi/03-measures.dax`. | `powerbi/` |
-| **About three minutes** | How long the 3B model takes to write the 11 summaries on a laptop processor. | Timed by hand on one laptop; not measured by any file in the repo. | README only |
 
 ### The weekly summary example
 

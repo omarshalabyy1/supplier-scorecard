@@ -167,8 +167,7 @@ Then build the report with [`powerbi/08-build-checklist.md`](powerbi/08-build-ch
 listens on port 5435, on this computer only.
 
 If Ollama crashes while loading the model on an older NVIDIA card, run it on the CPU: set
-`CUDA_VISIBLE_DEVICES=-1` and `GGML_VK_VISIBLE_DEVICES=-1`, then start `ollama serve`. The 3B model
-writes the eleven summaries in about three minutes on a laptop CPU.
+`CUDA_VISIBLE_DEVICES=-1` and `GGML_VK_VISIBLE_DEVICES=-1`, then start `ollama serve`.
 
 ```
 ├── config/client.yaml   every client value (name, input files, rules, summary, chart window, colours)
